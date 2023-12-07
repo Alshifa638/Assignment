@@ -14,7 +14,7 @@ app.use(function (req,res,next){
     );
     next();
 });
-var port = process.env.PORT ||2410;
+const port=2410;
 
 app.listen(port,()=>console.log(`Listening on port ${port}!`));
 
@@ -117,14 +117,17 @@ app.get("/products", function(req,res){
         let pp=shop.substring(2,3)
         let shopArr=pp.split(",");
         arr1=arr1.filter((st)=>shopArr.find((c1)=>c1==st.shopid));
-        console.log(shop)
+        console.log(shopArr)
        
     }
     if(product) {
-        let pp=product.substring(2,3)
-        let productArr=pp.split(",");
-        arr1=arr1.filter((st)=>productArr.find((c1)=>c1==st.productid));
+        
+        let productArr=product.split("pr")
       
+        arr1=arr1.filter((st)=>productArr.find((c1)=>c1.includes(st.productid)));
+        console.log(productArr)
+      
+        console.log(product)
     }
             res.send(arr1);  
     });
@@ -136,8 +139,6 @@ app.get("/products", function(req,res){
       
         find=arr2.filter((f)=>f.shopid==id);
         let arr=arr1.filter((f)=>find.find(s=>s.shopid==f.shopid))
-  console.log("find",find)
-  console.log("arr",arr)
          
         json=arr.map(st=>(
          
