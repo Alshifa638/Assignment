@@ -94,16 +94,20 @@ app.get("/products", function(req,res){
     let sort=req.query.sort;
     let shop=req.query.shop;
     let product=req.query.product;
-    let arr1=shopData.purchases
-    let arr2=shopData.products
-    let arr3=shopData.shops
- 
-        if(sort==="QtyAsc") {
+   
+     let a=[]
+  
+     let arr1=Object.values(shopData.purchases.map(p1=>
+        ({purchaseid:p1.purchaseid,shopid:p1.shopid,name:shopData.shops.find(s1=>s1.shopid==p1.shopid),quantity:p1.quantity,price:p1.price,productid:p1.productid
+            ,productName:shopData.products.find(s1=>s1.productid==p1.productid?s1.productName:'')})))
         
-            arr1=arr1.sort((st1,st2)=> st1.quantity-st2.quantity);
+      
+        if(sort==="QtyAsc") {
+            arr1= arr1.sort((st1,st2)=> st1.quantity-st2.quantity);
+            console.log("sort",sort)
         }
+
         if(sort==="QtyDesc") {
-            
             arr1=arr1.sort((st1,st2)=> -st1.quantity+st2.quantity);
         }
         if(sort==="ValueAsc") {
@@ -114,21 +118,20 @@ app.get("/products", function(req,res){
         }
     
     if(shop) {
-        let pp=shop.substring(2,3)
-        let shopArr=pp.split(",");
-        arr1=arr1.filter((st)=>shopArr.find((c1)=>c1==st.shopid));
-        console.log(shopArr)
-       
+        let find=arr1.find(s=>s.name.name==shop)
+        console.log("fffff",find)
+    
+
+        arr1=arr1.filter((st)=>st.shopid==shop.substring(2,3));
+console.log("ssssss",shop)
+
     }
     if(product) {
-        
         let productArr=product.split("pr")
-      
+
         arr1=arr1.filter((st)=>productArr.find((c1)=>c1.includes(st.productid)));
-        console.log(productArr)
-      
-        console.log(product)
     }
+   
             res.send(arr1);  
     });
 
